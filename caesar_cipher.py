@@ -1,57 +1,51 @@
-# --- STEP 1: Getting inputs from the user ---
-# --- ADIM 1: Kullanıcıdan girdileri alıyoruz ---
-
+# TR: Kullanıcıdan operasyon türünü alıyoruz ve doğru girdi girene kadar döngüde tutuyoruz (Girdi Doğrulaması).
+# EN: Get the operation type and enforce valid input using a while loop (Input Validation).
 operation = input("Type 'E' to Encrypt, 'D' to Decrypt: ").upper()
+while operation not in ['E', 'D']:
+    print("Invalid choice! / Geçersiz seçim! Please type 'E' or 'D'.")
+    operation = input("Type 'E' to Encrypt, 'D' to Decrypt: ").upper()
+
+# TR: Operasyon türü garanti altına alındıktan sonra diğer girdileri alıyoruz.
+# EN: Proceed with other inputs only after a valid operation is secured.
 message = input("Enter your message: ")
 key = int(input("Enter shift amount (a number between 1-25): "))
 
-# Variable to store the final result
-# Sonucu içine kaydedeceğimiz boş bir string değişkeni
+# TR: Kullanıcı 25'ten büyük girdiğinde algoritmanın alfabe dışına taşmasını önlemek için mod 26 alıyoruz.
+# EN: Apply modulo 26 to handle shift amounts greater than 25 safely.
+key = key % 26
+
 new_message = ""
 
-# --- STEP 2: Loop through each character in the message ---
-# --- ADIM 2: Mesajdaki her bir karakteri tek tek dönüyoruz ---
+# TR: 'isalpha()' fonksiyonu Türkçe karakterlerde True döndürüp ASCII hesabını bozduğu için,
+# kontrolü doğrudan İngiliz alfabesinden oluşan sabit bir string ile yapıyoruz.
+# EN: Since 'isalpha()' returns True for non-English characters and breaks ASCII calculations,
+# we validate characters directly using a fixed English alphabet string.
+ALFABE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+# TR: Mesajdaki her bir karakteri tek tek dönerek şifreleme/çözme işlemini başlatıyoruz.
+# EN: Loop through each character in the message to perform encryption or decryption.
 for character in message.upper():
     
-    # Check if the character is a letter (ignores spaces/numbers)
-    # Karakterin harf olup olmadığını kontrol ediyoruz (boşluk ve sayıları atlar)
-    if character.isalpha():
+    if character in ALFABE:
+        # TR: Harfin alfabedeki mevcut indeksini buluyoruz (0-25 arası).
+        # EN: Find the current index of the character in the alphabet (0-25).
+        mevcut_indeks = ALFABE.index(character)
         
-        # Get the ASCII value of the character (e.g., A = 65, Z = 90)
-        # Karakterin sayısal ASCII değerini alıyoruz (Örn: A = 65, Z = 90)
-        char_code = ord(character)
-        
-        # If the operation is ENCRYPTION, shift forward
-        # Eğer işlem ŞİFRELEME ise harfi ileri kaydırıyoruz
         if operation == 'E':
-            new_code = char_code + key
-            
-            # If the code goes past 'Z' (90), wrap around to the beginning
-            # Eğer yeni kod 'Z' harfini (90) geçerse, alfabenin başına dön
-            if new_code > 90:
-                new_code = new_code - 26
+            # TR: Şifreleme için harfi ileri kaydır ve alfabe sınırını aşarsa başa dönmesi için mod 26 uygula.
+            # EN: Shift forward for encryption and apply modulo 26 to wrap around the alphabet.
+            new_indeks = (mevcut_indeks + key) % 26
                 
-        # If the operation is DECRYPTION, shift backward
-        # Eğer işlem ÇÖZME ise harfi geri kaydırıyoruz
         elif operation == 'D':
-            new_code = char_code - key
-            
-            # If the code goes below 'A' (65), wrap around to the end
-            # Eğer yeni kod 'A' harfinin (65) altına düşerse, alfabenin sonuna dön
-            if new_code < 65:
-                new_code = new_code + 26
+            # TR: Çözme için harfi geri kaydır ve negatif indeksleri yönetmek için mod 26 uygula.
+            # EN: Shift backward for decryption and apply modulo 26 to handle negative indices.
+            new_indeks = (mevcut_indeks - key) % 26
         
-        # Convert the new ASCII code back to a character and append it
-        # Bulduğumuz yeni sayısal kodu tekrar harfe çevirip mesaja ekliyoruz
-        new_message += chr(new_code)
+        new_message += ALFABE[new_indeks]
         
     else:
-        # If it's not a letter (space, punctuation), keep it as it is
-        # Eğer karakter harf değilse (boşluk, nokta vb.) hiç dokunmadan aynen ekle
+        # TR: Karakter İngiliz alfabesinde yoksa (boşluk, sayı, Türkçe karakter), yapısını aynen koru.
+        # EN: If the character is not in the English alphabet (space, digit, punctuation), preserve it.
         new_message += character
-
-# --- STEP 3: Print the final result ---
-# --- ADIM 3: Sonucu ekrana yazdırıyoruz ---
 
 print(f"\nResult / Sonuç: {new_message}")
