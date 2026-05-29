@@ -8,6 +8,7 @@ This is a simple Python script developed to understand the basics of cryptograph
 * Decrypts cipher text back to plain text.
 * Ignores spaces and special characters during shift.
 * Dual-language code comments (EN/TR).
+* Input Validation: Enforces valid operation types ('E' or 'D') using a robust while loop to prevent application crashes, and automatically handles shift amounts greater than 25 using modulo 26 arithmetic.
 
 #### 💻 How to Run
 `python caesar_cipher.py`
@@ -22,6 +23,7 @@ Python'da kriptolojinin temellerini, döngüleri ve ASCII karakter işlemlerini 
 * Şifreli metni tekrar düz metne çözer.
 * Kaydırma esnasında boşlukları ve özel karakterleri korur.
 * Çift dilli kod yorum satırları içerir (EN/TR).
+* Girdi Doğrulama (Input Validation): Kullanıcı 'E' veya 'D' dışında geçersiz bir işlem türü girdiğinde program while döngüsüyle güvenli bir şekilde girdiyi zorunlu kılar; ayrıca 25'ten büyük kaydırma değerlerini mod 26 aritmetiği ile otomatik normalize eder.
 
 #### 💻 Nasıl Çalıştırılır
 `python caesar_cipher.py`
